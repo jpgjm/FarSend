@@ -1,0 +1,79 @@
+[versions]
+# Latest stable toolchain as of 2026-11 (1.0.0 overhaul):
+# - Kotlin 2.4.21: latest stable KGP; also drives the Compose compiler plugin version.
+# - AGP 9.5.1: latest stable. AGP 9 bundles built-in Kotlin, so org.jetbrains.kotlin.android
+#   is no longer applied (androidApp) and the shared KMP module uses
+#   com.android.kotlin.multiplatform.library instead of com.android.library.
+# - Gradle 9.9.0 (wrapper): AGP 9.x requires Gradle 9.6+.
+kotlin = "2.4.21"
+agp = "9.5.1"
+# Compose Multiplatform 1.12.2: latest stable. Requires compileSdk 37 on Android
+# (androidx Compose 1.12+ raised its compileSdk), which AGP 9.5 supports.
+compose-multiplatform = "1.12.2"
+coroutines = "1.11.0"
+serialization-json = "1.12.0"
+activity-compose = "1.13.0"
+core-ktx = "1.19.1"
+# Forces the transitive androidx.fragment 1.0.0 (via Play services) up to a version with the
+# ActivityResult API (lint error InvalidFragmentVersionForActivityResult)
+fragment = "1.9.1"
+# androidx lifecycle (androidApp) and org.jetbrains.androidx lifecycle (shared Compose code,
+# LocalLifecycleOwner / repeatOnLifecycle for the Device Hub online checks) are kept in step.
+lifecycle = "2.11.0"
+jetbrains-lifecycle = "2.11.0"
+iroh = "1.2.0"
+jna = "5.19.1"
+zxing-core = "3.5.4"
+# Google Code Scanner (Android QR). The camera UI ships with Play services, so no CAMERA permission
+code-scanner = "16.1.0"
+qrose = "1.3.1"
+# Material3 with M3 Expressive (MaterialExpressiveTheme, FloatingActionButtonMenu etc.).
+# The compose.material3 alias of CMP 1.12.2 points to the stable release (1.9.x, based on
+# androidx material3 1.4.x where the Expressive API was removed). The Expressive API is public
+# again from androidx material3 1.5.0-alpha onward; 1.12.0-alpha03 is the JetBrains build the
+# CMP 1.12 releases pair with (based on androidx material3 1.5.0-alpha22), so pin it explicitly.
+# No stable JetBrains material3 has the Expressive API yet (checked 2026-11).
+material3-expressive = "1.12.0-alpha03"
+opencv = "4.9.0-0"
+junit = "4.13.2"
+
+[libraries]
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
+kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
+kotlinx-coroutines-swing = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-swing", version.ref = "coroutines" }
+kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization-json" }
+androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activity-compose" }
+androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "core-ktx" }
+androidx-fragment = { module = "androidx.fragment:fragment", version.ref = "fragment" }
+androidx-lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycle" }
+jetbrains-lifecycle-runtime-compose = { module = "org.jetbrains.androidx.lifecycle:lifecycle-runtime-compose", version.ref = "jetbrains-lifecycle" }
+# CMP 1.12 deprecates the compose.runtime / compose.foundation / compose.ui plugin accessors
+# ("Specify dependency directly"), so the coordinates are declared here instead.
+compose-runtime = { module = "org.jetbrains.compose.runtime:runtime", version.ref = "compose-multiplatform" }
+compose-components-resources = { module = "org.jetbrains.compose.components:components-resources", version.ref = "compose-multiplatform" }
+compose-foundation = { module = "org.jetbrains.compose.foundation:foundation", version.ref = "compose-multiplatform" }
+compose-ui = { module = "org.jetbrains.compose.ui:ui", version.ref = "compose-multiplatform" }
+androidx-lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycle" }
+iroh-jvm = { module = "computer.iroh:iroh", version.ref = "iroh" }
+jna = { module = "net.java.dev.jna:jna", version.ref = "jna" }
+# Windows registry API (Advapi32Util auto-start). Keep the same version as jna
+jna-platform = { module = "net.java.dev.jna:jna-platform", version.ref = "jna" }
+iroh-android = { module = "computer.iroh:iroh-android", version.ref = "iroh" }
+zxing-core = { module = "com.google.zxing:core", version.ref = "zxing-core" }
+play-services-code-scanner = { module = "com.google.android.gms:play-services-code-scanner", version.ref = "code-scanner" }
+qrose = { module = "io.github.alexzhirkevich:qrose", version.ref = "qrose" }
+compose-material3-expressive = { module = "org.jetbrains.compose.material3:material3", version.ref = "material3-expressive" }
+opencv = { module = "org.openpnp:opencv", version.ref = "opencv" }
+junit = { module = "junit:junit", version.ref = "junit" }
+
+[plugins]
+kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+android-application = { id = "com.android.application", version.ref = "agp" }
+# AGP 9: KMP modules use the KMP library plugin (com.android.library + org.jetbrains.kotlin.multiplatform
+# in one module is not supported by the AGP 9 DSL)
+android-kmp-library = { id = "com.android.kotlin.multiplatform.library", version.ref = "agp" }
+compose-multiplatform = { id = "org.jetbrains.compose", version.ref = "compose-multiplatform" }

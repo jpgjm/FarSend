@@ -1,0 +1,5 @@
+headers = farsend_iroh.h
+headerFilter = farsend_iroh.h
+package = farsend.iroh
+# libfarsend_iroh.a is linked on the Xcode side (OTHER_LDFLAGS in project.yml).
+# shared is a static framework, so only the declarations are imported here.
